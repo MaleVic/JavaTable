@@ -14,18 +14,17 @@ class JavaSchoolStarter{
         if (value == null || value.isBlank()) {
             return null;
         }
-
+        
         if (value.equalsIgnoreCase("true")) {
             return true;
         } else if (value.equalsIgnoreCase("false")) {
             return false;
         } else if (value.matches("\\d+")) {
             return Integer.parseInt(value);
-        } else if (value.startsWith("'") && value.endsWith("'")) {
+        } else if (value.startsWith("С") && value.endsWith("С")) {
             return value.substring(1, value.length() - 1);
         } else {
             return value;
-            //throw new IllegalArgumentException("Invalid value: " + value);
         }
     }
 
@@ -65,7 +64,7 @@ class JavaSchoolStarter{
     private boolean matchesWhereClause(Map<String, Object> row, String whereClause) {
 // парсим выражение услови€
         String[] conditions = whereClause.split("(?i)where")[0].split("(?i)and|or");
-        String conditionsKey = whereClause.split("(?i)like|ilike|=|!=|>=|<=|>|<")[0].replace("С", "").replace("С","");
+        String conditionsKey = whereClause.split("(?i)like|ilike|=|!=|>=|<=|>|<")[0].replace("'","").replace("С", "");
 // парсим операторы сравнени€ и значени€
         String[] opsAndVals = new String[conditions.length];
         for (int i = 0; i < conditions.length; i++) {
@@ -86,8 +85,7 @@ class JavaSchoolStarter{
                 columnName = columnName.replace("С","").replace("Т","");
                 Object columnValue = entry.getValue();
 
-                // провер€ем соответствие имени колонки if ((row.containsKey(columnName)))
-                //columnName.equalsIgnoreCase(operator)
+                // провер€ем соответствие имени колонки
                 if (conditionsKey.equalsIgnoreCase(columnName)) {
                     // провер€ем соответствие значени€ в колонке
                     switch (operator) {
@@ -216,9 +214,6 @@ class JavaSchoolStarter{
 
 
     public static void main(String[] args) throws IOException {
-
-        //Map<String, Object> row = new HashMap<>();
-
         InputStreamReader in = new InputStreamReader(System.in);
         BufferedReader bf = new BufferedReader(in);
 
@@ -228,11 +223,10 @@ class JavaSchoolStarter{
         var obj =new JavaSchoolStarter(data);
         System.out.println("¬ведите команду: ");
 
-
             //obj.executeCommand(bf.readLine());
-            obj.executeCommand("INSERT VALUES СlastNameС = СѕетровС , СidС=1, СageС=25, СcostС=3.5, СactiveС=false");
-            obj.executeCommand("INSERT VALUES СlastNameС = С‘едоровС , СidС=3, СageС=40, СactiveС=true");
-            obj.executeCommand("update values СactiveС=true where СactiveС=false");
+            obj.executeCommand("INSERT VALUES 'lastName' = 'ѕетров' , 'id'=1, 'age'=25, 'cost'=3.5, 'active'=false");
+            obj.executeCommand("INSERT VALUES 'lastName' = '‘едоров' , 'id'=3, 'age'=40, 'active'=true");
+           obj.executeCommand("delete where 'id'=3");
 
     }
 }
