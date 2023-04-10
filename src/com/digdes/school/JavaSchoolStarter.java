@@ -82,7 +82,7 @@ class JavaSchoolStarter{
 
             boolean match = false;
             for (Map.Entry<String, Object> entry : row.entrySet()) {
-                String columnName = entry.getKey().replace("'", "");
+                String columnName = entry.getKey().replace("‘", "");
                 columnName = columnName.replace("‘","").replace("’","");
                 Object columnValue = entry.getValue();
 
@@ -180,12 +180,12 @@ class JavaSchoolStarter{
                         continue;
                     }
 
-                    String columnName = tokens[i].replace("'", "");
+                    String columnName = tokens[i].replace("‘", "");
                     columnName = columnName.replace("=", "");
 
-                    String value = tokens[i+1].replace("'", "");
+                    String value = tokens[i+1].replace("‘", "");
                     Object parsedValue = parseValue(value);
-                    columnName = "'" + columnName + "'";
+                    columnName = "‘" + columnName + "‘";
 
                     if (row.containsKey(columnName)) {
                         row.replace(columnName, parsedValue);
@@ -232,7 +232,7 @@ class JavaSchoolStarter{
             //obj.executeCommand(bf.readLine());
             obj.executeCommand("INSERT VALUES ‘lastName‘ = ‘Ïåòðîâ‘ , ‘id‘=1, ‘age‘=25, ‘cost‘=3.5, ‘active‘=false");
             obj.executeCommand("INSERT VALUES ‘lastName‘ = ‘Ôåäîðîâ‘ , ‘id‘=3, ‘age‘=40, ‘active‘=true");
-            obj.executeCommand("select where ‘id‘<3");
+            obj.executeCommand("update values ‘active‘=true where ‘active‘=false");
 
     }
 }
