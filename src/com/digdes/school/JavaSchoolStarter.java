@@ -28,6 +28,7 @@ class JavaSchoolStarter{
         }
     }
 
+    //Разбиение запроса на токены
     public List<Map<String, Object>> execute(String command) {
         String[] tokens = command.split("\\s+|(?<=\\w)(?=\\=)|(?<=\\=)(?=\\w)|(?<=\\,)(?=\\w)");
         String commandType = tokens[0];
@@ -61,6 +62,7 @@ class JavaSchoolStarter{
         return null;
     }
 
+    //Разбор выражения после where в запросе
     private boolean matchesWhereClause(Map<String, Object> row, String whereClause) {
         String[] conditions = whereClause.split("(?i)where")[0].split("(?i)and|or");
         String conditionsKey = whereClause.split("(?i)like|ilike|=|!=|>=|<=|>|<")[0].replace("'","").replace("‘","'");
@@ -115,6 +117,7 @@ class JavaSchoolStarter{
         return true;
     }
 
+    //Реализация INSERT
     private List<Map<String, Object>> insert(String[] tokens) {
 
         Map<String, Object> row = new HashMap<>();
@@ -139,6 +142,7 @@ class JavaSchoolStarter{
         return Collections.singletonList(row);
     }
 
+    //Реализация DELETE
     private List<Map<String, Object>> delete(String[] tokens) {
         String whereClause = getWhereClause(tokens);
         List<Map<String, Object>> deletedRows = new ArrayList<>();
@@ -154,6 +158,7 @@ class JavaSchoolStarter{
         return deletedRows;
     }
 
+    //Реализация UPDATE
     private List<Map<String, Object>> update(String[] tokens) {
         String whereClause = getWhereClause(tokens);
         List<Map<String, Object>> updatedRows = new ArrayList<>();
@@ -191,6 +196,7 @@ class JavaSchoolStarter{
         return updatedRows;
     }
 
+    //Реализация SELECT
     private List<Map<String, Object>> select(String[] tokens) {
         String whereClause = getWhereClause(tokens);
         List<Map<String, Object>> selectedRows = new ArrayList<>();
