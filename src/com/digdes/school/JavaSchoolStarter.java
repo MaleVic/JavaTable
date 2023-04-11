@@ -21,15 +21,14 @@ class JavaSchoolStarter{
             return false;
         } else if (value.matches("\\d+")) {
             return Integer.parseInt(value);
-        } else if (value.startsWith("С") && value.endsWith("С")) {
+        } else if (value.startsWith("'") && value.endsWith("'")) {
             return value.substring(1, value.length() - 1);
         } else {
             return value;
         }
     }
 
-    public List<Map<String, Object>> executeCommand(String command) {
-        //String[] tokens = command.split("\\s+");
+    public List<Map<String, Object>> execute(String command) {
         String[] tokens = command.split("\\s+|(?<=\\w)(?=\\=)|(?<=\\=)(?=\\w)|(?<=\\,)(?=\\w)");
         String commandType = tokens[0];
         commandType.toLowerCase();
@@ -46,6 +45,7 @@ class JavaSchoolStarter{
             default:
                 throw new IllegalArgumentException("Invalid command type");
         }
+
     }
 
     private String getWhereClause(String[] tokens) {
@@ -64,7 +64,7 @@ class JavaSchoolStarter{
     private boolean matchesWhereClause(Map<String, Object> row, String whereClause) {
 // парсим выражение услови€
         String[] conditions = whereClause.split("(?i)where")[0].split("(?i)and|or");
-        String conditionsKey = whereClause.split("(?i)like|ilike|=|!=|>=|<=|>|<")[0].replace("'","").replace("С", "");
+        String conditionsKey = whereClause.split("(?i)like|ilike|=|!=|>=|<=|>|<")[0].replace("'","").replace("С","'");
 // парсим операторы сравнени€ и значени€
         String[] opsAndVals = new String[conditions.length];
         for (int i = 0; i < conditions.length; i++) {
@@ -82,7 +82,7 @@ class JavaSchoolStarter{
             boolean match = false;
             for (Map.Entry<String, Object> entry : row.entrySet()) {
                 String columnName = entry.getKey().replace("С", "");
-                columnName = columnName.replace("С","").replace("Т","");
+                columnName = columnName.replace("С","'").replace("'","");
                 Object columnValue = entry.getValue();
 
                 // провер€ем соответствие имени колонки
@@ -129,11 +129,11 @@ class JavaSchoolStarter{
         Map<String, Object> row = new HashMap<>();
 
         for (int i = 2; i < tokens.length; i += 2) {
-            String columnName = tokens[i].replace("'", "");
-            String value = tokens[i + 1].replace("'", "");
+            String columnName = tokens[i].replace("'", "С").replace("С", "");
+            String value = tokens[i + 1].replace("'", "С").replace("С", "");
             if(value != null && value.equals("="))
             {
-                value = tokens[i + 2].replace("'", "");
+                value = tokens[i + 2].replace("'", "С").replace("С", "").replace(",", "");
                 i+=2;
             }
             value = value.replace(",", "");
@@ -178,12 +178,12 @@ class JavaSchoolStarter{
                         continue;
                     }
 
-                    String columnName = tokens[i].replace("С", "");
+                    String columnName = tokens[i].replace("'", "С").replace("С", "");
                     columnName = columnName.replace("=", "");
 
-                    String value = tokens[i+1].replace("С", "");
+                    String value = tokens[i+1].replace("'", "С").replace("С", "");
                     Object parsedValue = parseValue(value);
-                    columnName = "С" + columnName + "С";
+                    //columnName = "С" + columnName + "С";
 
                     if (row.containsKey(columnName)) {
                         row.replace(columnName, parsedValue);
@@ -222,74 +222,7 @@ class JavaSchoolStarter{
 
         var obj =new JavaSchoolStarter(data);
         System.out.println("¬ведите команду: ");
-
-            //obj.executeCommand(bf.readLine());
-            obj.executeCommand("INSERT VALUES 'lastName' = 'ѕетров' , 'id'=1, 'age'=25, 'cost'=3.5, 'active'=false");
-            obj.executeCommand("INSERT VALUES 'lastName' = '‘едоров' , 'id'=3, 'age'=40, 'active'=true");
-           obj.executeCommand("delete where 'id'=3");
-
+        for(;;)
+            obj.execute(bf.readLine());
     }
-}
-
-
-class Keyin {
-
-    //*******************************
-    //   support methods
-    //*******************************
-    //Method to display the user's prompt string
-    public static void printPrompt(String prompt) {
-        System.out.print(prompt + " ");
-        System.out.flush();
-    }
-
-    //Method to make sure no data is available in the
-    //input stream
-    public static void inputFlush() {
-        int dummy;
-        int bAvail;
-
-        try {
-            while ((System.in.available()) != 0)
-                dummy = System.in.read();
-        } catch (java.io.IOException e) {
-            System.out.println("Input error");
-        }
-    }
-    public static String inString() {
-        int aChar;
-        String s = "";
-        boolean finished = false;
-
-        while (!finished) {
-            try {
-                aChar = System.in.read();
-                if (aChar < 0 || (char) aChar == '\n')
-                    finished = true;
-                else if ((char) aChar != '\r')
-                    s = s + (char) aChar; // Enter into string
-            }
-
-            catch (java.io.IOException e) {
-                System.out.println("Input error");
-                finished = true;
-            }
-        }
-        return s;
-    }
-
-    public static int inInt(String prompt) {
-        while (true) {
-            inputFlush();
-            printPrompt(prompt);
-            try {
-                return Integer.valueOf(inString().trim()).intValue();
-            }
-
-            catch (NumberFormatException e) {
-                System.out.println("Invalid input. Not an integer");
-            }
-        }
-    }
-
 }
