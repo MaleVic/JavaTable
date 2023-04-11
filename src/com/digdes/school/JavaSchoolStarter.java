@@ -43,7 +43,7 @@ class JavaSchoolStarter{
             case "SELECT":
                 return select(tokens);
             default:
-                throw new IllegalArgumentException("Invalid command type");
+                throw new IllegalArgumentException("Неверная команда");
         }
 
     }
@@ -102,6 +102,8 @@ class JavaSchoolStarter{
                         case "<":
                             match = ((Number) columnValue).doubleValue() < ((Number) parseValue(value)).doubleValue();
                             break;
+                        default:
+                            throw new IllegalArgumentException("Данный оператор не поддерживается");
                     }
 
                 }
