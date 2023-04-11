@@ -6,8 +6,8 @@ import java.util.*;
 
 class JavaSchoolStarter{
     List<Map<String, Object>> data;
-    public JavaSchoolStarter(List<Map<String, Object>> data) {
-        this.data = data;
+    public JavaSchoolStarter() {
+        data = new ArrayList<>();
     }
 
     private static Object parseValue(String value) {
@@ -62,10 +62,8 @@ class JavaSchoolStarter{
     }
 
     private boolean matchesWhereClause(Map<String, Object> row, String whereClause) {
-// парсим выражение условия
         String[] conditions = whereClause.split("(?i)where")[0].split("(?i)and|or");
         String conditionsKey = whereClause.split("(?i)like|ilike|=|!=|>=|<=|>|<")[0].replace("'","").replace("‘","'");
-// парсим операторы сравнения и значения
         String[] opsAndVals = new String[conditions.length];
         for (int i = 0; i < conditions.length; i++) {
             String[] parts = conditions[i].split("(?i)like|ilike|=|!=|>=|<=|>|<");
@@ -73,7 +71,6 @@ class JavaSchoolStarter{
             String value = parts[1].trim();
             opsAndVals[i] = operator + "," + value;
         }
-// проверяем условие выборки для каждой строки
         for (String condition : opsAndVals) {
             String[] parts = condition.split(",");
             String operator = parts[0];
@@ -85,14 +82,8 @@ class JavaSchoolStarter{
                 columnName = columnName.replace("‘","'").replace("'","");
                 Object columnValue = entry.getValue();
 
-                // проверяем соответствие имени колонки
                 if (conditionsKey.equalsIgnoreCase(columnName)) {
-                    // проверяем соответствие значения в колонке
                     switch (operator) {
-                        case "like":
-                        case "ilike":
-                            match = columnValue.toString().toLowerCase().contains(value.toLowerCase());
-                            break;
                         case "=":
                             match = columnValue.equals(parseValue(value));
                             break;
@@ -115,12 +106,10 @@ class JavaSchoolStarter{
 
                 }
             }
-            // если хотя бы одно условие не совпало, возвращаем false
             if (!match) {
                 return false;
             }
         }
-// все условия совпали
         return true;
     }
 
@@ -217,10 +206,7 @@ class JavaSchoolStarter{
         InputStreamReader in = new InputStreamReader(System.in);
         BufferedReader bf = new BufferedReader(in);
 
-
-        List<Map<String, Object>> data = new ArrayList<>();
-
-        var obj =new JavaSchoolStarter(data);
+        var obj =new JavaSchoolStarter();
         System.out.println("Введите команду: ");
         for(;;)
             obj.execute(bf.readLine());
